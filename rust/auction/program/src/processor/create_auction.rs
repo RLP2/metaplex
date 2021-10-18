@@ -75,6 +75,7 @@ pub fn create_auction(
     args: CreateAuctionArgs,
     instant_sale_price: Option<u64>,
     name: Option<AuctionName>,
+    reward_size : Option<u64>,
 ) -> ProgramResult {
     msg!("+ Processing CreateAuction");
     let accounts = parse_accounts(program_id, accounts)?;
@@ -110,6 +111,13 @@ pub fn create_auction(
         }
     }
 
+    if let Some(tick) = args.tick_size {
+        if let Some(reward) = reward_size {
+            if reward > tick {
+                return Err(AuctionError::InvalidRewardSize.into());
+            }
+        }
+    }
     // Create auction account with enough space for a winner tracking.
     create_or_allocate_account_raw(
         *program_id,
@@ -160,6 +168,7 @@ pub fn create_auction(
         gap_tick_size_percentage: args.gap_tick_size_percentage,
         instant_sale_price,
         name,
+        reward_size,
     }
     .serialize(&mut *accounts.auction_extended.data.borrow_mut())?;
 

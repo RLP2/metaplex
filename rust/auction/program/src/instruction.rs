@@ -9,7 +9,7 @@ use solana_program::{
 pub use crate::processor::{
     cancel_bid::CancelBidArgs, claim_bid::ClaimBidArgs, create_auction::CreateAuctionArgs,
     create_auction_v2::CreateAuctionArgsV2, end_auction::EndAuctionArgs, place_bid::PlaceBidArgs,
-    start_auction::StartAuctionArgs,
+    start_auction::StartAuctionArgs,create_auction_v3::CreateAuctionArgsV3,place_bid_v2::PlaceBidArgsV2,
 };
 
 #[derive(Clone, BorshSerialize, BorshDeserialize, PartialEq)]
@@ -92,6 +92,8 @@ pub enum AuctionInstruction {
     ///   3. `[]` Rent sysvar
     ///   4. `[]` System account
     CreateAuctionV2(CreateAuctionArgsV2),
+    CreateAuctionV3(CreateAuctionArgsV3),
+    PlaceBidV2(PlaceBidArgsV2),
 }
 
 /// Creates an CreateAuction instruction.

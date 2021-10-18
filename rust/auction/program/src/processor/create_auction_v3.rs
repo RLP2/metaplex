@@ -26,7 +26,7 @@ use {
 
 #[repr(C)]
 #[derive(Clone, BorshSerialize, BorshDeserialize, PartialEq)]
-pub struct CreateAuctionArgsV2 {
+pub struct CreateAuctionArgsV3 {
     /// How many winners are allowed for this auction. See AuctionData.
     pub winners: WinnerLimit,
     /// End time is the cut-off point that the auction is forced to end by. See AuctionData.
@@ -49,6 +49,8 @@ pub struct CreateAuctionArgsV2 {
     pub instant_sale_price: Option<u64>,
     /// Auction name
     pub name: Option<AuctionName>,
+
+    pub reward_size : Option<u64>,
 }
 
 struct Accounts<'a, 'b: 'a> {
@@ -74,10 +76,10 @@ fn parse_accounts<'a, 'b: 'a>(
     Ok(accounts)
 }
 
-pub fn create_auction_v2(
+pub fn create_auction_v3(
     program_id: &Pubkey,
     accounts: &[AccountInfo],
-    args: CreateAuctionArgsV2,
+    args: CreateAuctionArgsV3,
 ) -> ProgramResult {
     create_auction(
         program_id,
@@ -95,6 +97,6 @@ pub fn create_auction_v2(
         },
         args.instant_sale_price,
         args.name,
-        None,
+        args.reward_size,
     )
 }
